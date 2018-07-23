@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene ,SKPhysicsContactDelegate{
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
@@ -21,30 +21,69 @@ class GameScene: SKScene {
     override func sceneDidLoad() {
 
         self.lastUpdateTime = 0
+        self.physicsWorld.contactDelegate = self
         
         // Physical Node
         self.label = self.childNode(withName: "//node") as? SKSpriteNode
         label?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (label?.size.width)!,
                                                                height: (label?.size.height)!))
         label?.physicsBody?.usesPreciseCollisionDetection = true
-        
+        label?.physicsBody?.mass = 100
+        label?.physicsBody?.affectedByGravity = true
+        label?.physicsBody?.allowsRotation = false
+//        label?.physicsBody!.contactTestBitMask = label!.physicsBody!.collisionBitMask
         
         // The Ground
-        var line = [CGPoint(x: self.frame.minX, y: -640),
+        var gLine = [CGPoint(x: self.frame.minX, y: -640),
                             CGPoint(x: self.frame.maxX, y: -640)]
-        let ground = SKShapeNode(splinePoints: &line,
-                                 count: line.count)
+        let ground = SKShapeNode(splinePoints: &gLine,
+                                 count: gLine.count)
         ground.lineWidth = 6
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
-        ground.physicsBody?.restitution = 0.75
+        ground.physicsBody?.restitution = 0.7
         ground.physicsBody?.isDynamic = false
         self.addChild(ground)
+        
+        // Left, Right & Top Edge detecting contact
+        var lLine = [CGPoint(x: self.frame.minX, y: -640),
+                     CGPoint(x: self.frame.minX, y: self.frame.maxY)]
+        let left = SKShapeNode(splinePoints: &lLine,
+                                 count: lLine.count)
+        left.physicsBody = SKPhysicsBody(edgeChainFrom: left.path!)
+        left.physicsBody?.restitution = 1
+        left.physicsBody?.isDynamic = false
+        left.physicsBody!.contactTestBitMask = left.physicsBody!.collisionBitMask
+        self.addChild(left)
+        
+        var rLine = [CGPoint(x: self.frame.maxX, y: -640),
+                     CGPoint(x: self.frame.maxX, y: self.frame.maxY)]
+        let right = SKShapeNode(splinePoints: &rLine,
+                               count: rLine.count)
+        right.physicsBody = SKPhysicsBody(edgeChainFrom: right.path!)
+        right.physicsBody?.restitution = 1
+        right.physicsBody?.isDynamic = false
+        right.physicsBody!.contactTestBitMask = right.physicsBody!.collisionBitMask
+        self.addChild(right)
+        
+        var tLine = [CGPoint(x: self.frame.minX, y: self.frame.maxY),
+                     CGPoint(x: self.frame.maxX, y: self.frame.maxY)]
+        let top = SKShapeNode(splinePoints: &tLine,
+                                count: tLine.count)
+        top.physicsBody = SKPhysicsBody(edgeChainFrom: top.path!)
+        top.physicsBody?.restitution = 1
+        top.physicsBody?.isDynamic = false
+        top.physicsBody!.contactTestBitMask = top.physicsBody!.collisionBitMask
+        self.addChild(top)
         
         
         if let label = self.label {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
+            print("Show")
         }
+        
+    
+
         
         // Create shape node to use during mouse interaction
         let w = (self.size.width + self.size.height) * 0.05
@@ -60,6 +99,11 @@ class GameScene: SKScene {
         }
     }
     
+    func didBegin(_ contact: SKPhysicsContact) {
+        if let label = self.label {
+            label.color = .green
+        }
+    }
     
     func touchDown(atPoint pos : CGPoint) {
         if let n = self.spinnyNode?.copy() as! SKShapeNode? {
@@ -86,10 +130,22 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+        for t in touches {
+            let location = t.location(in: self)
+            
+            if(location.x < 0){
+                if let label = self.label {
+                    label.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 155000.0))
+                    label.physicsBody?.applyForce(CGVector(dx: -800000, dy: 0))
+                }
+            }
+            else {
+                if let label = self.label {
+                    label.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 155000.0))
+                    label.physicsBody?.applyForce(CGVector(dx: 800000, dy: 0))
+                }
+            }
         }
-        
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
