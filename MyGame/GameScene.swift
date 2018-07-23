@@ -31,7 +31,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         label?.physicsBody?.mass = 100
         label?.physicsBody?.affectedByGravity = true
         label?.physicsBody?.allowsRotation = false
-//        label?.physicsBody!.contactTestBitMask = label!.physicsBody!.collisionBitMask
+        label?.physicsBody!.contactTestBitMask = label!.physicsBody!.collisionBitMask
         
         // The Ground
         var gLine = [CGPoint(x: self.frame.minX, y: -640),
@@ -42,6 +42,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
         ground.physicsBody?.restitution = 0.7
         ground.physicsBody?.isDynamic = false
+//        ground.physicsBody!.contactTestBitMask = ground.physicsBody!.collisionBitMask
         self.addChild(ground)
         
         // Left, Right & Top Edge detecting contact
@@ -52,7 +53,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         left.physicsBody = SKPhysicsBody(edgeChainFrom: left.path!)
         left.physicsBody?.restitution = 1
         left.physicsBody?.isDynamic = false
-        left.physicsBody!.contactTestBitMask = left.physicsBody!.collisionBitMask
+//        left.physicsBody!.contactTestBitMask = left.physicsBody!.collisionBitMask
         self.addChild(left)
         
         var rLine = [CGPoint(x: self.frame.maxX, y: -640),
@@ -62,7 +63,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         right.physicsBody = SKPhysicsBody(edgeChainFrom: right.path!)
         right.physicsBody?.restitution = 1
         right.physicsBody?.isDynamic = false
-        right.physicsBody!.contactTestBitMask = right.physicsBody!.collisionBitMask
+//        right.physicsBody!.contactTestBitMask = right.physicsBody!.collisionBitMask
         self.addChild(right)
         
         var tLine = [CGPoint(x: self.frame.minX, y: self.frame.maxY),
@@ -72,7 +73,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         top.physicsBody = SKPhysicsBody(edgeChainFrom: top.path!)
         top.physicsBody?.restitution = 1
         top.physicsBody?.isDynamic = false
-        top.physicsBody!.contactTestBitMask = top.physicsBody!.collisionBitMask
+//        top.physicsBody!.contactTestBitMask = top.physicsBody!.collisionBitMask
         self.addChild(top)
         
         
