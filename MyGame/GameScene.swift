@@ -22,16 +22,19 @@ class GameScene: SKScene {
 
         self.lastUpdateTime = 0
         
-        // Get label node from scene and store it for use later
+        // Physical Node
         self.label = self.childNode(withName: "//node") as? SKSpriteNode
         label?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (label?.size.width)!,
                                                                height: (label?.size.height)!))
         label?.physicsBody?.usesPreciseCollisionDetection = true
-        var splinePoints = [CGPoint(x: -320, y: -640),
-                            CGPoint(x: 320, y: -640)]
-        let ground = SKShapeNode(splinePoints: &splinePoints,
-                                 count: splinePoints.count)
-        ground.lineWidth = 5
+        
+        
+        // The Ground
+        var line = [CGPoint(x: self.frame.minX, y: -640),
+                            CGPoint(x: self.frame.maxX, y: -640)]
+        let ground = SKShapeNode(splinePoints: &line,
+                                 count: line.count)
+        ground.lineWidth = 6
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
         ground.physicsBody?.restitution = 0.75
         ground.physicsBody?.isDynamic = false
