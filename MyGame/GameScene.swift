@@ -15,7 +15,7 @@ class GameScene: SKScene {
     var graphs = [String : GKGraph]()
     
     private var lastUpdateTime : TimeInterval = 0
-    private var label : SKLabelNode?
+    private var label : SKSpriteNode?
     private var spinnyNode : SKShapeNode?
     
     override func sceneDidLoad() {
@@ -23,7 +23,9 @@ class GameScene: SKScene {
         self.lastUpdateTime = 0
         
         // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
+        self.label = self.childNode(withName: "//node") as? SKSpriteNode
+        label?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (label?.size.width)!,
+                                                               height: (label?.size.height)!))
         if let label = self.label {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
