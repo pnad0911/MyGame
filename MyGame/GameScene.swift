@@ -26,6 +26,18 @@ class GameScene: SKScene {
         self.label = self.childNode(withName: "//node") as? SKSpriteNode
         label?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (label?.size.width)!,
                                                                height: (label?.size.height)!))
+        label?.physicsBody?.usesPreciseCollisionDetection = true
+        var splinePoints = [CGPoint(x: -320, y: -640),
+                            CGPoint(x: 320, y: -640)]
+        let ground = SKShapeNode(splinePoints: &splinePoints,
+                                 count: splinePoints.count)
+        ground.lineWidth = 5
+        ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
+        ground.physicsBody?.restitution = 0.75
+        ground.physicsBody?.isDynamic = false
+        self.addChild(ground)
+        
+        
         if let label = self.label {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
