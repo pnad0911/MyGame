@@ -9,6 +9,33 @@
 import SpriteKit
 import GameplayKit
 
+struct Queue{
+    
+    var items:[SKSpriteNode] = []
+    
+    mutating func enqueue(element: SKSpriteNode)
+    {
+        items.append(element)
+    }
+    
+    mutating func dequeue() -> SKSpriteNode?
+    {
+        
+        if items.isEmpty {
+            return nil
+        }
+        else{
+            let tempElement = items.first
+            items.remove(at: 0)
+            return tempElement
+        }
+    }
+    
+    mutating func isEmpty() -> Bool? {
+        return items.isEmpty
+    }
+}
+
 class GameScene: SKScene ,SKPhysicsContactDelegate{
     
     var entities = [GKEntity]()
@@ -16,6 +43,11 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     
     private var touch:Bool = false
     private var touLeft:Bool = false
+    private var hei:CGFloat = 0
+    private var limitHei:CGFloat = 0
+    private let rate:CGFloat = 0.2
+    private var queue = Queue()
+    
     private var lastUpdateTime : TimeInterval = 0
     private var label : SKSpriteNode?
     private var spinnyNode : SKShapeNode?
@@ -24,6 +56,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
 
         self.lastUpdateTime = 0
         self.physicsWorld.contactDelegate = self
+        view?.preferredFramesPerSecond = 100
         
         // Physical Node
         self.label = self.childNode(withName: "//node") as? SKSpriteNode
@@ -99,6 +132,21 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
             spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
                                               SKAction.fadeOut(withDuration: 0.5),
                                               SKAction.removeFromParent()]))
+        }
+        
+        
+        hei = self.frame.minY
+        while hei < self.frame.maxY {
+            let a = SKSpriteNode(color: .cyan, size: CGRect(x: 50, y: 100, width: 150, height: rate).size)
+            a.anchorPoint = CGPoint( x: 0, y: rate)
+            a.position = CGPoint( x: self.frame.minX, y: hei)
+            a.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 150, height: rate))
+            a.physicsBody?.isDynamic = false
+            a.physicsBody?.affectedByGravity = false
+            left.physicsBody?.restitution = 1
+            self.addChild(a)
+            queue.enqueue(element: a)
+            hei += rate
         }
     }
     
@@ -192,6 +240,21 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         }
         
         self.lastUpdateTime = currentTime
+        
+//        if(limitHei < 100) {
+//            hei += rate
+//            limitHei += rate
+//            let a = SKSpriteNode(color: .cyan, size: CGRect(x: 50, y: 100, width: 150, height: rate).size)
+//            a.anchorPoint = CGPoint( x: 0, y: rate)
+//            a.position = CGPoint( x: self.frame.minX, y: hei)
+//            self.addChild(a)
+//            queue.enqueue(element: a)
+//        } else {
+//            if(!queue.isEmpty()!) {
+//                queue.dequeue()?.removeFromParent()
+//            }
+//        }
+        
         
 //        if(touch) {
 //            if(touLeft) {
