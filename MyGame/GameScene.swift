@@ -14,6 +14,8 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
     
+    private var touch:Bool = false
+    private var touLeft:Bool = false
     private var lastUpdateTime : TimeInterval = 0
     private var label : SKSpriteNode?
     private var spinnyNode : SKShapeNode?
@@ -46,7 +48,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         self.addChild(ground)
         
         // Left, Right & Top Edge detecting contact
-        var lLine = [CGPoint(x: self.frame.minX, y: -640),
+        var lLine = [CGPoint(x: self.frame.minX, y: -640), CGPoint(x: self.frame.minX + 100, y: -320),
                      CGPoint(x: self.frame.minX, y: self.frame.maxY)]
         let left = SKShapeNode(splinePoints: &lLine,
                                  count: lLine.count)
@@ -133,29 +135,39 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             let location = t.location(in: self)
-            
-            if(location.x < 0){
+            if(location.x < -110){
+                touch = true
+                touLeft = true
                 if let label = self.label {
-                    label.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 155000.0))
-                    label.physicsBody?.applyForce(CGVector(dx: -800000, dy: 0))
+                    label.physicsBody?.applyImpulse(CGVector(dx: -8000, dy: 90000.0))
                 }
             }
-            else {
+            else if (location.x > 110){
+                touch = true
+                touLeft = false
                 if let label = self.label {
-                    label.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 155000.0))
-                    label.physicsBody?.applyForce(CGVector(dx: 800000, dy: 0))
+                    label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 90000.0))
+                }
+            } else {
+                if let label = self.label {
+                    let temp = (label.physicsBody?.velocity.dx)! * (-100)
+                    label.physicsBody?.applyImpulse(CGVector(dx: temp, dy: 90000.0))
                 }
             }
         }
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for t in touches {
+            self.touchUp(atPoint: t.location(in: self))
+            touch = false
+        }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -180,5 +192,19 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         }
         
         self.lastUpdateTime = currentTime
+        
+//        if(touch) {
+//            if(touLeft) {
+//                if let label = self.label {
+//                    label.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 5000.0))
+//                    label.physicsBody?.applyForce(CGVector(dx: -10000, dy: 0))
+//                }
+//            } else {
+//                if let label = self.label {
+//                    label.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 5000.0))
+//                    label.physicsBody?.applyForce(CGVector(dx: 10000, dy: 0))
+//                }
+//            }
+//        }
     }
 }
