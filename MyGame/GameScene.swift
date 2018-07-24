@@ -142,7 +142,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
             a.position = CGPoint( x: self.frame.minX, y: hei)
             a.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 150, height: rate))
             a.physicsBody?.isDynamic = false
-            a.physicsBody?.affectedByGravity = false
             left.physicsBody?.restitution = 1
             self.addChild(a)
             queue.enqueue(element: a)
