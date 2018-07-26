@@ -121,6 +121,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         left?.physicsBody?.isDynamic = false
         left?.strokeColor = .white
         left?.lineWidth = 2
+        left?.name = "left"
         self.addChild(left!)
         
         var rLine = [CGPoint(x: self.frame.maxX, y: BOTTOM_HEIGHT),
@@ -272,63 +273,23 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         
         self.lastUpdateTime = currentTime
         
+        updateLeft()
+    }
+    
+    func updateLeft() {
         queue.dequeue()
 //        let random:CGFloat = CGFloat(arc4random_uniform(100) + 1);
 //        queue.update()
 //        queue.enqueue(element: CGPoint(x: self.frame.minX + random, y: self.frame.maxY - rate))
-        left?.removeFromParent()
-        let lLine = CGMutablePath()
-        lLine.addLines(between: (queue.array())!)
-        left = SKShapeNode()
-        left?.path = lLine
-        left?.physicsBody = SKPhysicsBody(edgeChainFrom: (left?.path!)!)
-//        if dur == 300 {
-//            left?.removeFromParent()
-//            let lLine = CGMutablePath()
-//            queue.dequeue()
-//            queue.enqueue(element: CGPoint(x: self.frame.minX + 300, y: 0))
-//
-//            lLine.addLines(between: (queue.array())!)
-//            left = SKShapeNode()
-//            left?.path = lLine
-//            left?.physicsBody = SKPhysicsBody(edgeChainFrom: (left?.path!)!)
-//            left?.physicsBody?.restitution = 1
-//            left?.physicsBody?.isDynamic = false
-//            left?.strokeColor = .white
-//            left?.lineWidth = 2
-//            self.addChild(left!)
-//        }
-//        dur += 1
-        
-        
-        
-//        if(limitHei < 100) {
-//            hei += rate
-//            limitHei += rate
-//            let a = SKSpriteNode(color: .cyan, size: CGRect(x: 50, y: 100, width: 150, height: rate).size)
-//            a.anchorPoint = CGPoint( x: 0, y: rate)
-//            a.position = CGPoint( x: self.frame.minX, y: hei)
-//            self.addChild(a)
-//            queue.enqueue(element: a)
-//        } else {
-//            if(!queue.isEmpty()!) {
-//                queue.dequeue()?.removeFromParent()
-//            }
-//        }
-        
-        
-//        if(touch) {
-//            if(touLeft) {
-//                if let label = self.label {
-//                    label.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 5000.0))
-//                    label.physicsBody?.applyForce(CGVector(dx: -10000, dy: 0))
-//                }
-//            } else {
-//                if let label = self.label {
-//                    label.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 5000.0))
-//                    label.physicsBody?.applyForce(CGVector(dx: 10000, dy: 0))
-//                }
-//            }
-//        }
+//        left?.removeFromParent()
+        enumerateChildNodes(withName: "left", using: { (le,stop) in
+            let a = le as! SKShapeNode
+            let lLine = CGMutablePath()
+            lLine.addLines(between: (self.queue.array())!)
+            a.path = lLine
+            a.physicsBody = SKPhysicsBody(edgeChainFrom: (a.path!))
+        })
+//        let lLine = CGMutablePath()
+//        lLine.addLines(between: (queue.array())!)
     }
 }
