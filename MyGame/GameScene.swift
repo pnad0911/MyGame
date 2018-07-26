@@ -104,21 +104,21 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         label?.physicsBody?.usesPreciseCollisionDetection = true
         label?.physicsBody?.mass = 100
         label?.physicsBody?.affectedByGravity = true
-        label?.physicsBody?.allowsRotation = false
+        label?.physicsBody?.allowsRotation = true
         label?.physicsBody!.contactTestBitMask = label!.physicsBody!.collisionBitMask
         
         // INITIALIZE GROUND & LEFT
-        var x:CGFloat = 0
+        var x:CGFloat = self.frame.minX
         var oldHei = BOTTOM_HEIGHT
         queue.enqueue(element: CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT))
-        while x < 40000 {
-            x += 200
-            oldHei += (CGFloat(arc4random_uniform(200)) - 100)
+        while x < 10000 {
+            x += (CGFloat(arc4random_uniform(15)) + 5)
+            oldHei += (CGFloat(arc4random_uniform(100)) - 50)
             queue.enqueue(element: CGPoint(x: x, y: oldHei))
         }
         var gLine = queue.array()
         let ground = SKShapeNode(splinePoints: &gLine, count: gLine.count)
-        ground.lineWidth = 6
+        ground.lineWidth = 0.1
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
         ground.physicsBody?.restitution = 0.7
         ground.physicsBody?.isDynamic = false
