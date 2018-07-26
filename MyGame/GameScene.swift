@@ -63,8 +63,8 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     private var blockHei:CGFloat = 0
     private let rate:CGFloat = 0.2
     private var queue = Queue()
-    private var lLine:Array<CGPoint> = []
-    private var left:SKShapeNode?
+//    private var lLine:Array<CGPoint> = []
+//    private var left:SKShapeNode?
     private var dur:Int = 0
     private let BOTTOM_HEIGHT:CGFloat = -640
     private var fra:Bool = false
@@ -122,19 +122,20 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
         ground.physicsBody?.restitution = 0.7
         ground.physicsBody?.isDynamic = false
+        ground.name = "ground"
         self.addChild(ground)
         
         var lLine = [CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT),
                      CGPoint(x: self.frame.minX, y: self.frame.maxY)]
-        left = SKShapeNode()
+        var left = SKShapeNode()
         left = SKShapeNode(splinePoints: &lLine, count: lLine.count)
-        left?.physicsBody = SKPhysicsBody(edgeChainFrom: (left?.path!)!)
-        left?.physicsBody?.restitution = 1
-        left?.physicsBody?.isDynamic = false
-        left?.strokeColor = .white
-        left?.lineWidth = 2
-        left?.name = "left"
-        self.addChild(left!)
+        left.physicsBody = SKPhysicsBody(edgeChainFrom: (left.path!))
+        left.physicsBody?.restitution = 1
+        left.physicsBody?.isDynamic = false
+        left.strokeColor = .white
+        left.lineWidth = 2
+        left.name = "left"
+        self.addChild(left)
     }
     
     
