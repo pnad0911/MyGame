@@ -40,7 +40,7 @@ struct Queue{
         return items.isEmpty
     }
     
-    mutating func array() -> [CGPoint]? {
+    mutating func array() -> [CGPoint] {
         return items
     }
     
@@ -67,13 +67,21 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     private var left:SKShapeNode?
     private var dur:Int = 0
     private let BOTTOM_HEIGHT:CGFloat = -640
+    private var fra:Bool = false
     
     private var lastUpdateTime : TimeInterval = 0
     private var label : SKSpriteNode?
     private var spinnyNode : SKShapeNode?
+    private var cam: SKCameraNode?
     
     override func sceneDidLoad() {
 
+//        cam = SKCameraNode(fileNamed: "cam")
+        self.camera = self.childNode(withName: "//cam") as? SKCameraNode
+//        self.addChild(cam!)
+//        self.anchorPoint = CGPoint(x: 0.5,y: 0.5);
+        
+        
         self.lastUpdateTime = 0
         self.physicsWorld.contactDelegate = self
         view?.preferredFramesPerSecond = 100
@@ -89,10 +97,16 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         label?.physicsBody!.contactTestBitMask = label!.physicsBody!.collisionBitMask
         
         // The Ground
-        var gLine = [CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT),
-                            CGPoint(x: self.frame.maxX, y: BOTTOM_HEIGHT)]
-        let ground = SKShapeNode(splinePoints: &gLine,
-                                 count: gLine.count)
+        var x:CGFloat = 0
+        var oldHei = BOTTOM_HEIGHT
+        queue.enqueue(element: CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT))
+        while x < 40000 {
+            x += 200
+            oldHei += (CGFloat(arc4random_uniform(200)) - 100)
+            queue.enqueue(element: CGPoint(x: x, y: oldHei))
+        }
+        var gLine = queue.array()
+        let ground = SKShapeNode(splinePoints: &gLine, count: gLine.count)
         ground.lineWidth = 6
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
         ground.physicsBody?.restitution = 0.7
@@ -100,22 +114,27 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         self.addChild(ground)
         
         // Left, Right & Top Edge detecting contact
-        let lLine = CGMutablePath()
-        var ngang:CGFloat = self.frame.minX
-        hei = BOTTOM_HEIGHT
-        while hei < self.frame.maxY {
-            hei += rate
-            if blockHei < limitHei {
-                blockHei += rate
-                queue.enqueue(element: CGPoint(x: ngang, y: hei))
-            } else {
-                ngang += 20
-                blockHei = 0
-            }
-        }
-        lLine.addLines(between: (queue.array())!)
+//        let lLine = CGMutablePath()
+//        var ngang:CGFloat = self.frame.minX
+//        hei = BOTTOM_HEIGHT
+//        while hei < self.frame.maxY {
+//            hei += rate
+//            if blockHei < limitHei {
+//                blockHei += rate
+//                queue.enqueue(element: CGPoint(x: ngang, y: hei))
+//            } else {
+//                ngang += 20
+//                blockHei = 0
+//            }
+//        }
+//        lLine.addLines(between: (queue.array())!)
+//        left = SKShapeNode()
+//        left?.path = lLine
+        
+        var lLine = [CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT),
+                     CGPoint(x: self.frame.minX, y: self.frame.maxY)]
         left = SKShapeNode()
-        left?.path = lLine
+        left = SKShapeNode(splinePoints: &lLine, count: lLine.count)
         left?.physicsBody = SKPhysicsBody(edgeChainFrom: (left?.path!)!)
         left?.physicsBody?.restitution = 1
         left?.physicsBody?.isDynamic = false
@@ -124,23 +143,23 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         left?.name = "left"
         self.addChild(left!)
         
-        var rLine = [CGPoint(x: self.frame.maxX, y: BOTTOM_HEIGHT),
-                     CGPoint(x: self.frame.maxX, y: self.frame.maxY)]
-        let right = SKShapeNode(splinePoints: &rLine,
-                               count: rLine.count)
-        right.physicsBody = SKPhysicsBody(edgeChainFrom: right.path!)
-        right.physicsBody?.restitution = 1
-        right.physicsBody?.isDynamic = false
-        self.addChild(right)
-        
-        var tLine = [CGPoint(x: self.frame.minX, y: self.frame.maxY),
-                     CGPoint(x: self.frame.maxX, y: self.frame.maxY)]
-        let top = SKShapeNode(splinePoints: &tLine,
-                                count: tLine.count)
-        top.physicsBody = SKPhysicsBody(edgeChainFrom: top.path!)
-        top.physicsBody?.restitution = 1
-        top.physicsBody?.isDynamic = false
-        self.addChild(top)
+//        var rLine = [CGPoint(x: self.frame.maxX, y: BOTTOM_HEIGHT),
+//                     CGPoint(x: self.frame.maxX, y: self.frame.maxY)]
+//        let right = SKShapeNode(splinePoints: &rLine,
+//                               count: rLine.count)
+//        right.physicsBody = SKPhysicsBody(edgeChainFrom: right.path!)
+//        right.physicsBody?.restitution = 1
+//        right.physicsBody?.isDynamic = false
+//        self.addChild(right)
+//
+//        var tLine = [CGPoint(x: self.frame.minX, y: self.frame.maxY),
+//                     CGPoint(x: self.frame.maxX, y: self.frame.maxY)]
+//        let top = SKShapeNode(splinePoints: &tLine,
+//                                count: tLine.count)
+//        top.physicsBody = SKPhysicsBody(edgeChainFrom: top.path!)
+//        top.physicsBody?.restitution = 1
+//        top.physicsBody?.isDynamic = false
+//        self.addChild(top)
         
         
         if let label = self.label {
@@ -213,28 +232,35 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches {
-            let location = t.location(in: self)
-            if(location.x < -110){
-                touch = true
-                touLeft = true
-                if let label = self.label {
-                    label.physicsBody?.applyImpulse(CGVector(dx: -8000, dy: 90000.0))
-                }
-            }
-            else if (location.x > 110){
-                touch = true
-                touLeft = false
-                if let label = self.label {
-                    label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 90000.0))
-                }
-            } else {
-                if let label = self.label {
-                    let temp = (label.physicsBody?.velocity.dx)! * (-100)
-                    label.physicsBody?.applyImpulse(CGVector(dx: temp, dy: 90000.0))
-                }
-            }
+        if let label = self.label {
+            label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 90000.0))
         }
+        
+        
+        
+        
+//        for t in touches {
+//            let location = t.location(in: self)
+//            if(location.x < -110){
+//                touch = true
+//                touLeft = true
+//                if let label = self.label {
+//                    label.physicsBody?.applyImpulse(CGVector(dx: -8000, dy: 90000.0))
+//                }
+//            }
+//            else if (location.x > 110){
+//                touch = true
+//                touLeft = false
+//                if let label = self.label {
+//                    label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 90000.0))
+//                }
+//            } else {
+//                if let label = self.label {
+//                    let temp = (label.physicsBody?.velocity.dx)! * (-100)
+//                    label.physicsBody?.applyImpulse(CGVector(dx: temp, dy: 90000.0))
+//                }
+//            }
+//        }
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
@@ -272,8 +298,12 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         }
         
         self.lastUpdateTime = currentTime
-        
-        updateLeft()
+//        self.camera?.position.x = (self.label?.position.x)!
+//        updateLeft()
+    }
+    
+    override func didFinishUpdate() {
+        self.camera?.position = (self.label?.position)!
     }
     
     func updateLeft() {
@@ -282,13 +312,13 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
 //        queue.update()
 //        queue.enqueue(element: CGPoint(x: self.frame.minX + random, y: self.frame.maxY - rate))
 //        left?.removeFromParent()
-        enumerateChildNodes(withName: "left", using: { (le,stop) in
-            let a = le as! SKShapeNode
-            let lLine = CGMutablePath()
-            lLine.addLines(between: (self.queue.array())!)
-            a.path = lLine
-            a.physicsBody = SKPhysicsBody(edgeChainFrom: (a.path!))
-        })
+//        enumerateChildNodes(withName: "left", using: { (le,stop) in
+//            let a = le as! SKShapeNode
+//            let lLine = CGMutablePath()
+//            lLine.addLines(between: (self.queue.array())!)
+//            a.path = lLine
+//            a.physicsBody = SKPhysicsBody(edgeChainFrom: (a.path!))
+//        })
 //        let lLine = CGMutablePath()
 //        lLine.addLines(between: (queue.array())!)
     }
