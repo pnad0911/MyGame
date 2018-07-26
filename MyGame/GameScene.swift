@@ -74,19 +74,30 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     private var spinnyNode : SKShapeNode?
     private var cam: SKCameraNode?
     
-    override func sceneDidLoad() {
-
-//        cam = SKCameraNode(fileNamed: "cam")
-        self.camera = self.childNode(withName: "//cam") as? SKCameraNode
-//        self.addChild(cam!)
-//        self.anchorPoint = CGPoint(x: 0.5,y: 0.5);
-        
-        
-        self.lastUpdateTime = 0
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    override init() {
+        super.init()
+        setup()
+    }
+    
+    override init(size: CGSize) {
+        super.init(size: size)
+        setup()
+    }
+    
+    func setup()
+    {
         self.physicsWorld.contactDelegate = self
         view?.preferredFramesPerSecond = 100
         
-        // Physical Node
+        // INITIALIZE CAMERA
+        self.camera = self.childNode(withName: "//cam") as? SKCameraNode
+        
+        // INITIALIZE PLAYER NODE
         self.label = self.childNode(withName: "//node") as? SKSpriteNode
         label?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (label?.size.width)!,
                                                                height: (label?.size.height)!))
@@ -96,7 +107,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         label?.physicsBody?.allowsRotation = false
         label?.physicsBody!.contactTestBitMask = label!.physicsBody!.collisionBitMask
         
-        // The Ground
+        // INITIALIZE GROUND & LEFT
         var x:CGFloat = 0
         var oldHei = BOTTOM_HEIGHT
         queue.enqueue(element: CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT))
@@ -113,24 +124,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         ground.physicsBody?.isDynamic = false
         self.addChild(ground)
         
-        // Left, Right & Top Edge detecting contact
-//        let lLine = CGMutablePath()
-//        var ngang:CGFloat = self.frame.minX
-//        hei = BOTTOM_HEIGHT
-//        while hei < self.frame.maxY {
-//            hei += rate
-//            if blockHei < limitHei {
-//                blockHei += rate
-//                queue.enqueue(element: CGPoint(x: ngang, y: hei))
-//            } else {
-//                ngang += 20
-//                blockHei = 0
-//            }
-//        }
-//        lLine.addLines(between: (queue.array())!)
-//        left = SKShapeNode()
-//        left?.path = lLine
-        
         var lLine = [CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT),
                      CGPoint(x: self.frame.minX, y: self.frame.maxY)]
         left = SKShapeNode()
@@ -142,35 +135,17 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         left?.lineWidth = 2
         left?.name = "left"
         self.addChild(left!)
-        
-//        var rLine = [CGPoint(x: self.frame.maxX, y: BOTTOM_HEIGHT),
-//                     CGPoint(x: self.frame.maxX, y: self.frame.maxY)]
-//        let right = SKShapeNode(splinePoints: &rLine,
-//                               count: rLine.count)
-//        right.physicsBody = SKPhysicsBody(edgeChainFrom: right.path!)
-//        right.physicsBody?.restitution = 1
-//        right.physicsBody?.isDynamic = false
-//        self.addChild(right)
-//
-//        var tLine = [CGPoint(x: self.frame.minX, y: self.frame.maxY),
-//                     CGPoint(x: self.frame.maxX, y: self.frame.maxY)]
-//        let top = SKShapeNode(splinePoints: &tLine,
-//                                count: tLine.count)
-//        top.physicsBody = SKPhysicsBody(edgeChainFrom: top.path!)
-//        top.physicsBody?.restitution = 1
-//        top.physicsBody?.isDynamic = false
-//        self.addChild(top)
-        
+    }
+    
+    
+    override func sceneDidLoad() {
         
         if let label = self.label {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
             print("Show")
         }
-        
-    
-
-        
+  
         // Create shape node to use during mouse interaction
         let w = (self.size.width + self.size.height) * 0.05
         self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
@@ -185,7 +160,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         }
         
         
-        hei = self.frame.minY
+//        hei = self.frame.minY
 //        while hei < self.frame.maxY {
 //            let a = SKSpriteNode(color: .cyan, size: CGRect(x: 50, y: 100, width: 150, height: rate).size)
 //            a.anchorPoint = CGPoint( x: 0, y: rate)
@@ -197,15 +172,15 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
 //            queue.enqueue(element: a)
 //            hei += rate
 //        }
-        
-        
     }
+    
     
     func didBegin(_ contact: SKPhysicsContact) {
         if let label = self.label {
             label.color = .green
         }
     }
+    
     
     func touchDown(atPoint pos : CGPoint) {
         if let n = self.spinnyNode?.copy() as! SKShapeNode? {
@@ -214,6 +189,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
             self.addChild(n)
         }
     }
+    
     
     func touchMoved(toPoint pos : CGPoint) {
         if let n = self.spinnyNode?.copy() as! SKShapeNode? {
@@ -235,8 +211,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         if let label = self.label {
             label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 90000.0))
         }
-        
-        
         
         
 //        for t in touches {
