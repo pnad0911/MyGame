@@ -160,7 +160,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
                                               SKAction.removeFromParent()]))
         }
         
-        
 //        hei = self.frame.minY
 //        while hei < self.frame.maxY {
 //            let a = SKSpriteNode(color: .cyan, size: CGRect(x: 50, y: 100, width: 150, height: rate).size)
