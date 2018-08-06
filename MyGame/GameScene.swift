@@ -158,8 +158,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
             spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
                                               SKAction.fadeOut(withDuration: 0.5),
                                               SKAction.removeFromParent()]))
-        }
-        
+        }        
         
 //        hei = self.frame.minY
 //        while hei < self.frame.maxY {
