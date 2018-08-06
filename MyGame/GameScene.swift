@@ -242,7 +242,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
-    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
     }
