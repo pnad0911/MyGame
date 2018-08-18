@@ -65,6 +65,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     private var queue = Queue()
 //    private var lLine:Array<CGPoint> = []
 //    private var left:SKShapeNode?
+    
     private var dur:Int = 0
     private let BOTTOM_HEIGHT:CGFloat = -640
     private var fra:Bool = false
