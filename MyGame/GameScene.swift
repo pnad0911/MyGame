@@ -13,6 +13,7 @@ struct Queue{
     
     var items:[CGPoint] = []
     
+    
     mutating func enqueue(element: CGPoint)
     {
         items.append(element)
