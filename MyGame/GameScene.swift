@@ -275,6 +275,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         self.lastUpdateTime = currentTime
 //        self.camera?.position.x = (self.label?.position.x)!
 //        updateLeft()
+        
     }
     
     override func didFinishUpdate() {
