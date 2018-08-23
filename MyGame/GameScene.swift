@@ -99,7 +99,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         // INITIALIZE CAMERA
         self.camera = self.childNode(withName: "//cam") as? SKCameraNode
         
-        // INITIALIZE PLAYER NODE
+        // INITIALIZE PLAYER NODE  ---
         self.label = self.childNode(withName: "//node") as? SKSpriteNode
         label?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (label?.size.width)!,
                                                                height: (label?.size.height)!))
