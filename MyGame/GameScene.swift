@@ -24,7 +24,7 @@ struct Queue{
         if !items.isEmpty {
             items.remove(at: 0)
         } else {
-            print("Error info: Removing empty queue")
+            print("Error info: Removing an empty queue")
         }
     }
     
