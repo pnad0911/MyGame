@@ -27,7 +27,6 @@ struct Queue{
             print("Error info: Removing an empty queue")
         }
     }
-    
     mutating func peek() -> CGPoint? {
         if !items.isEmpty {
             return items.first
