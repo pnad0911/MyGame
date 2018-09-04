@@ -137,6 +137,8 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         left.lineWidth = 2
         left.name = "left"
         self.addChild(left)
+        
+        physicsWorld.gravity = CGVector(dx:0, dy: -0.4)
     }
     
     
@@ -159,7 +161,11 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
             spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
                                               SKAction.fadeOut(withDuration: 0.5),
                                               SKAction.removeFromParent()]))
+<<<<<<< HEAD
+        }        
+=======
         }
+>>>>>>> 398e8e2bcf629895b1b603f6a40dee20627956df
         
 //        hei = self.frame.minY
 //        while hei < self.frame.maxY {
@@ -238,7 +244,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
 //        }
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
-    
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
