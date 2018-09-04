@@ -137,6 +137,8 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         left.lineWidth = 2
         left.name = "left"
         self.addChild(left)
+        
+        physicsWorld.gravity = CGVector(dx:0, dy: -0.4)
     }
     
     
