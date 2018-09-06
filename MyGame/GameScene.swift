@@ -112,10 +112,17 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         var x:CGFloat = self.frame.minX
         var oldHei = BOTTOM_HEIGHT
         queue.enqueue(element: CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT))
+        var ran:UInt32 = 0
         while x < 10000 {
-            x += (CGFloat(arc4random_uniform(15)) + 5)
-            oldHei += (CGFloat(arc4random_uniform(100)) - 50)
-            queue.enqueue(element: CGPoint(x: x, y: oldHei))
+            ran = arc4random_uniform(4)
+            if( ran == 2 ) {
+                x += (CGFloat(arc4random_uniform(15)) + 5)
+                oldHei += (CGFloat(arc4random_uniform(100)) - 50)
+                queue.enqueue(element: CGPoint(x: x, y: oldHei))
+            } else {
+                x += 3
+                queue.enqueue(element: CGPoint(x: x, y: oldHei))
+            }
         }
         var gLine = queue.array()
         let ground = SKShapeNode(splinePoints: &gLine, count: gLine.count)
@@ -212,7 +219,8 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let label = self.label {
-            label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 90000.0))
+//            label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 90000.0))
+            label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 9000.0))
         }
         
         
