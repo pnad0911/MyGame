@@ -115,7 +115,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         var ran:UInt32 = 0
         while x < 10000 {
             ran = arc4random_uniform(4)
-            if( ran == 2 ) {
+            if( ran == 1 ) {
                 x += (CGFloat(arc4random_uniform(15)) + 5)
                 oldHei += (CGFloat(arc4random_uniform(100)) - 50)
                 queue.enqueue(element: CGPoint(x: x, y: oldHei))
