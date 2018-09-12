@@ -131,6 +131,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         ground.physicsBody?.restitution = 0.7
         ground.physicsBody?.isDynamic = false
         ground.name = "ground"
+        ground.isAntialiased = false
         self.addChild(ground)
         
         var lLine = [CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT),
