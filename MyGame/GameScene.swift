@@ -128,7 +128,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         let ground = SKShapeNode(splinePoints: &gLine, count: gLine.count)
         ground.lineWidth = 0.1
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
-        ground.physicsBody?.restitution = 0.7
+        ground.physicsBody?.restitution = 0.8
         ground.physicsBody?.isDynamic = false
         ground.name = "ground"
         ground.isAntialiased = false
@@ -289,6 +289,9 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     
     override func didFinishUpdate() {
         self.camera?.position = (self.label?.position)!
+        if (self.label?.physicsBody?.velocity.dy == 0 && self.label?.physicsBody?.velocity.dx == 0) {
+            print("Equal 0")
+        }
     }
     
     func updateLeft() {
