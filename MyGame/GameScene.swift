@@ -63,6 +63,9 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     private var blockHei:CGFloat = 0
     private let rate:CGFloat = 0.2
     private var queue = Queue()
+    private var point:CGFloat = 0
+    private var time:Int32 = 0
+    private var show:Bool = false
 //    private var lLine:Array<CGPoint> = []
 //    private var left:SKShapeNode?
     
@@ -128,7 +131,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         let ground = SKShapeNode(splinePoints: &gLine, count: gLine.count)
         ground.lineWidth = 0.1
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
-        ground.physicsBody?.restitution = 0.8
+        ground.physicsBody?.restitution = 0.6
         ground.physicsBody?.isDynamic = false
         ground.name = "ground"
         ground.isAntialiased = false
@@ -289,8 +292,17 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     
     override func didFinishUpdate() {
         self.camera?.position = (self.label?.position)!
-        if (self.label?.physicsBody?.velocity.dy == 0 && self.label?.physicsBody?.velocity.dx == 0) {
-            print("Equal 0")
+        if(show == false) {
+            if (ceil(Double((self.label?.physicsBody?.velocity.dy)!)) == 0 && ceil(Double((self.label?.physicsBody?.velocity.dx)!)) == 0) {
+                time += 1
+                if (time == 10) {
+                    point += ((label?.frame.origin.y)! + self.frame.minY)
+                    print(point)
+                    show = true
+                }
+            } else {
+                time = 0
+            }
         }
     }
     
