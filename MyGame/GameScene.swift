@@ -9,6 +9,14 @@
 import SpriteKit
 import GameplayKit
 
+public func + (left: CGPoint, right: CGPoint) -> CGPoint {
+    return CGPoint(x: left.x + right.x, y: left.y + right.y)
+}
+
+public func += (left: inout CGPoint, right: CGPoint) {
+    left = left + right
+}
+
 struct Queue{
     
     var items:[CGPoint] = []
@@ -99,7 +107,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         view?.preferredFramesPerSecond = 100
         
         // INITIALIZE CAMERA
-        self.camera = self.childNode(withName: "//cam") as? SKCameraNode
+//        self.camera = self.childNode(withName: "//cam") as? SKCameraNode
         
         // INITIALIZE PLAYER NODE  ---
         self.label = self.childNode(withName: "//node") as? SKSpriteNode
@@ -110,6 +118,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         label?.physicsBody?.affectedByGravity = true
         label?.physicsBody?.allowsRotation = true
         label?.physicsBody!.contactTestBitMask = label!.physicsBody!.collisionBitMask
+        label?.physicsBody?.angularDamping = 0.05
         
         // INITIALIZE GROUND & LEFT
         var x:CGFloat = self.frame.minX
@@ -127,15 +136,16 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
                 queue.enqueue(element: CGPoint(x: x, y: oldHei))
             }
         }
-        var gLine = queue.array()
-        let ground = SKShapeNode(splinePoints: &gLine, count: gLine.count)
-        ground.lineWidth = 0.1
-        ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
-        ground.physicsBody?.restitution = 0.6
-        ground.physicsBody?.isDynamic = false
-        ground.name = "ground"
-        ground.isAntialiased = false
-        self.addChild(ground)
+//        var gLine = queue.array()
+//        let ground = SKShapeNode(splinePoints: &gLine, count: gLine.count)
+//        ground.lineWidth = 1
+//        ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
+//        ground.physicsBody?.restitution = 0.6
+//        ground.physicsBody?.isDynamic = false
+//        ground.name = "ground"
+//        ground.isAntialiased = true
+//        ground.physicsBody?.friction = 1
+//        self.addChild(ground)
         
         var lLine = [CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT),
                      CGPoint(x: self.frame.minX, y: self.frame.maxY)]
@@ -150,6 +160,8 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         self.addChild(left)
         
         physicsWorld.gravity = CGVector(dx:0, dy: -0.4)
+        
+        setUpBackgrounds()
     }
     
     
@@ -288,15 +300,23 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
 //        self.camera?.position.x = (self.label?.position.x)!
 //        updateLeft()
         
+        if lastUpdateTimeInterval == 0 {
+            lastUpdateTimeInterval = currentTime
+        }
+        
+        deltaTime = currentTime - lastUpdateTimeInterval
+        lastUpdateTimeInterval = currentTime
+        
+        updateGroundMovement()
     }
     
     override func didFinishUpdate() {
-        self.camera?.position = (self.label?.position)!
+//        self.camera?.position = (self.label?.position)!
         if(show == false) {
-            if (ceil(Double((self.label?.physicsBody?.velocity.dy)!)) == 0 && ceil(Double((self.label?.physicsBody?.velocity.dx)!)) == 0) {
+            if (ceil(Double((self.label?.physicsBody?.velocity.dy)!)) == 0 || ceil(Double((self.label?.physicsBody?.velocity.dy)!)) == 1.0) {
                 time += 1
                 if (time == 10) {
-                    point += ((label?.frame.origin.y)! + self.frame.minY)
+                    point += ((label?.frame.origin.y)! + 2*self.frame.maxY)
                     print(point)
                     show = true
                 }
@@ -322,4 +342,38 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
 //        let lLine = CGMutablePath()
 //        lLine.addLines(between: (queue.array())!)
     }
+    
+    var backgroundSpeed: CGFloat = 80.0 // speed may vary as you like
+    var deltaTime: TimeInterval = 0
+    var lastUpdateTimeInterval: TimeInterval = 0
+    func setUpBackgrounds() {
+        
+        for i in 0...2 {
+            // I have used one ground image, you can use 3
+            let ground = SKSpriteNode(color: UIColor.white, size: CGSize(width: 1, height: 2))
+            ground.anchorPoint = CGPoint(x: 0, y: 0)
+            ground.size = CGSize(width: self.size.width, height: ground.size.height)
+            ground.position = CGPoint(x: CGFloat(i) * size.width, y: 0)
+            ground.zPosition = 1
+            ground.name = "ground"
+            self.addChild(ground)
+            
+        }
+    }
+
+    func updateGroundMovement() {
+        self.enumerateChildNodes(withName: "ground") { (node, stop) in
+            
+            if let back = node as? SKSpriteNode {
+                let move = CGPoint(x: -self.backgroundSpeed * CGFloat(self.deltaTime), y: 0)
+                back.position += move
+                
+                if back.position.x < -back.size.width {
+                    back.position += CGPoint(x: 0, y: 100)
+                }
+            }
+            
+        }
+    }
+
 }
