@@ -349,7 +349,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     func setUpBackgrounds() {
         
         for i in 0...2 {
-            // I have used one ground image, you can use 3
             let ground = SKSpriteNode(color: UIColor.white, size: CGSize(width: 1, height: 2))
             ground.anchorPoint = CGPoint(x: 0, y: 0)
             ground.size = CGSize(width: self.size.width, height: ground.size.height)
