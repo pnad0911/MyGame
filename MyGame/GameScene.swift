@@ -343,7 +343,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
 //        lLine.addLines(between: (queue.array())!)
     }
     
-    var backgroundSpeed: CGFloat = 80.0 // speed may vary as you like
+    var backgroundSpeed: CGFloat = 80.0
     var deltaTime: TimeInterval = 0
     var lastUpdateTimeInterval: TimeInterval = 0
     func setUpBackgrounds() {
