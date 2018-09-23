@@ -347,7 +347,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     var deltaTime: TimeInterval = 0
     var lastUpdateTimeInterval: TimeInterval = 0
     func setUpBackgrounds() {
-        
         for i in 0...2 {
             let ground = SKSpriteNode(color: UIColor.white, size: CGSize(width: 1, height: 2))
             ground.anchorPoint = CGPoint(x: 0, y: 0)
