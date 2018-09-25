@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1557785A2159F390008D8B9F /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155778592159F390008D8B9F /* Alerts.swift */; };
 		15C79F2B2106551C006AB4A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C79F2A2106551C006AB4A9 /* AppDelegate.swift */; };
 		15C79F2D2106551C006AB4A9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 15C79F2C2106551C006AB4A9 /* GameScene.sks */; };
 		15C79F2F2106551C006AB4A9 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 15C79F2E2106551C006AB4A9 /* Actions.sks */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		155778592159F390008D8B9F /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		15C79F272106551C006AB4A9 /* MyGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C79F2A2106551C006AB4A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15C79F2C2106551C006AB4A9 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				15C79F372106551D006AB4A9 /* Assets.xcassets */,
 				15C79F392106551D006AB4A9 /* LaunchScreen.storyboard */,
 				15C79F3C2106551D006AB4A9 /* Info.plist */,
+				155778592159F390008D8B9F /* Alerts.swift */,
 			);
 			path = MyGame;
 			sourceTree = "<group>";
@@ -202,13 +205,16 @@
 				TargetAttributes = {
 					15C79F262106551C006AB4A9 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 					15C79F402106551E006AB4A9 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 15C79F262106551C006AB4A9;
 					};
 					15C79F4B2106551E006AB4A9 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 15C79F262106551C006AB4A9;
 					};
 				};
@@ -269,6 +275,7 @@
 			files = (
 				15C79F312106551C006AB4A9 /* GameScene.swift in Sources */,
 				15C79F332106551C006AB4A9 /* GameViewController.swift in Sources */,
+				1557785A2159F390008D8B9F /* Alerts.swift in Sources */,
 				15C79F2B2106551C006AB4A9 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -450,7 +457,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = PNAD.MyGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -467,7 +474,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = PNAD.MyGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -486,7 +493,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = PNAD.MyGameTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyGame.app/MyGame";
 			};
@@ -506,7 +513,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = PNAD.MyGameTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyGame.app/MyGame";
 			};
@@ -525,7 +532,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = PNAD.MyGameUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = MyGame;
 			};
@@ -544,7 +551,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = PNAD.MyGameUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = MyGame;
 			};
