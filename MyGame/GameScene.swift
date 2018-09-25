@@ -355,7 +355,6 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
             ground.zPosition = 1
             ground.name = "ground"
             self.addChild(ground)
-            
         }
     }
 
