@@ -82,7 +82,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     private var fra:Bool = false
     
     private var lastUpdateTime : TimeInterval = 0
-    private var label : SKSpriteNode?
+    private var rocket : SKSpriteNode?
     private var spinnyNode : SKShapeNode?
     private var cam: SKCameraNode?
     
@@ -104,70 +104,24 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     func setup()
     {
         self.physicsWorld.contactDelegate = self
+        physicsWorld.gravity = CGVector(dx:0, dy: -0.4)
         view?.preferredFramesPerSecond = 100
         
         // INITIALIZE CAMERA
-//        self.camera = self.childNode(withName: "//cam") as? SKCameraNode
+        self.camera = self.childNode(withName: "//cam") as? SKCameraNode
         
         // INITIALIZE PLAYER NODE  ---
-        self.label = self.childNode(withName: "//node") as? SKSpriteNode
-        label?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (label?.size.width)!,
-                                                               height: (label?.size.height)!))
-        label?.physicsBody?.usesPreciseCollisionDetection = true
-        label?.physicsBody?.mass = 100
-        label?.physicsBody?.affectedByGravity = true
-        label?.physicsBody?.allowsRotation = true
-        label?.physicsBody!.contactTestBitMask = label!.physicsBody!.collisionBitMask
-        label?.physicsBody?.angularDamping = 0.05
+        setUpRocket()
         
         // INITIALIZE GROUND & LEFT
-        var x:CGFloat = self.frame.minX
-        var oldHei = BOTTOM_HEIGHT
-        queue.enqueue(element: CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT))
-        var ran:UInt32 = 0
-        while x < 10000 {
-            ran = arc4random_uniform(4)
-            if( ran == 1 ) {
-                x += (CGFloat(arc4random_uniform(15)) + 5)
-                oldHei += (CGFloat(arc4random_uniform(100)) - 50)
-                queue.enqueue(element: CGPoint(x: x, y: oldHei))
-            } else {
-                x += 3
-                queue.enqueue(element: CGPoint(x: x, y: oldHei))
-            }
-        }
-//        var gLine = queue.array()
-//        let ground = SKShapeNode(splinePoints: &gLine, count: gLine.count)
-//        ground.lineWidth = 1
-//        ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
-//        ground.physicsBody?.restitution = 0.6
-//        ground.physicsBody?.isDynamic = false
-//        ground.name = "ground"
-//        ground.isAntialiased = true
-//        ground.physicsBody?.friction = 1
-//        self.addChild(ground)
-        
-        var lLine = [CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT),
-                     CGPoint(x: self.frame.minX, y: self.frame.maxY)]
-        var left = SKShapeNode()
-        left = SKShapeNode(splinePoints: &lLine, count: lLine.count)
-        left.physicsBody = SKPhysicsBody(edgeChainFrom: (left.path!))
-        left.physicsBody?.restitution = 1
-        left.physicsBody?.isDynamic = false
-        left.strokeColor = .white
-        left.lineWidth = 2
-        left.name = "left"
-        self.addChild(left)
-        
-        physicsWorld.gravity = CGVector(dx:0, dy: -0.4)
-        
-        setUpBackgrounds()
+        setUpGround()
+        setUpLeftWall()
     }
     
     
     override func sceneDidLoad() {
         
-        if let label = self.label {
+        if let label = self.rocket {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
             print("Show")
@@ -202,7 +156,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     
     
     func didBegin(_ contact: SKPhysicsContact) {
-        if let label = self.label {
+        if let label = self.rocket {
             label.color = .green
         }
     }
@@ -234,7 +188,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
+        if let label = self.rocket {
 //            label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 90000.0))
             label.physicsBody?.applyImpulse(CGVector(dx: 8000, dy: 9000.0))
         }
@@ -307,16 +261,16 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         deltaTime = currentTime - lastUpdateTimeInterval
         lastUpdateTimeInterval = currentTime
         
-        updateGroundMovement()
+//        updateGroundMovement()
     }
     
     override func didFinishUpdate() {
-//        self.camera?.position = (self.label?.position)!
+        self.camera?.position = (self.rocket?.position)!
         if(show == false) {
-            if (ceil(Double((self.label?.physicsBody?.velocity.dy)!)) == 0 || ceil(Double((self.label?.physicsBody?.velocity.dy)!)) == 1.0) {
+            if (ceil(Double((self.rocket?.physicsBody?.velocity.dy)!)) == 0 || ceil(Double((self.rocket?.physicsBody?.velocity.dy)!)) == 1.0) {
                 time += 1
                 if (time == 10) {
-                    point += ((label?.frame.origin.y)! + 2*self.frame.maxY)
+                    point += ((rocket?.frame.origin.y)! + 2*self.frame.maxY)
                     print(point)
                     show = true
                 }
@@ -324,6 +278,61 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
                 time = 0
             }
         }
+    }
+    
+    func setUpRocket() {
+        self.rocket = self.childNode(withName: "//node") as? SKSpriteNode
+        rocket?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (rocket?.size.width)!, height: (rocket?.size.height)!))
+        rocket?.physicsBody?.usesPreciseCollisionDetection = true
+        rocket?.physicsBody?.mass = 100
+        rocket?.physicsBody?.affectedByGravity = true
+        rocket?.physicsBody?.allowsRotation = true
+        rocket?.physicsBody!.contactTestBitMask = rocket!.physicsBody!.collisionBitMask
+        rocket?.physicsBody?.angularDamping = 0.05
+    }
+    
+    func setUpGround() {
+        var x:CGFloat = self.frame.minX
+        var oldHei = BOTTOM_HEIGHT
+        queue.enqueue(element: CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT))
+        var ran:UInt32 = 0
+        while x < 10000 {
+            ran = arc4random_uniform(4)
+            if( ran == 1 ) {
+                x += (CGFloat(arc4random_uniform(15)) + 5)
+                oldHei += (CGFloat(arc4random_uniform(100)) - 50)
+                queue.enqueue(element: CGPoint(x: x, y: oldHei))
+            } else {
+                x += 3
+                queue.enqueue(element: CGPoint(x: x, y: oldHei))
+            }
+        }
+        var gLine = queue.array()
+        let ground = SKShapeNode(points: &gLine, count: gLine.count)
+        ground.lineWidth = 1
+        ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
+        ground.physicsBody?.restitution = 0.6
+        ground.physicsBody?.isDynamic = false
+        ground.name = "ground"
+        ground.isAntialiased = false
+        ground.physicsBody?.friction = 1
+        self.addChild(ground)
+        
+//        setUpBackgrounds()
+    }
+    
+    func setUpLeftWall() {
+        var lLine = [CGPoint(x: self.frame.minX, y: BOTTOM_HEIGHT),
+                     CGPoint(x: self.frame.minX, y: self.frame.maxY)]
+        var left = SKShapeNode()
+        left = SKShapeNode(splinePoints: &lLine, count: lLine.count)
+        left.physicsBody = SKPhysicsBody(edgeChainFrom: (left.path!))
+        left.physicsBody?.restitution = 1
+        left.physicsBody?.isDynamic = false
+        left.strokeColor = .white
+        left.lineWidth = 2
+        left.name = "left"
+        self.addChild(left)
     }
     
     func updateLeft() {
