@@ -59,7 +59,7 @@ struct Queue{
     }
 }
 
-class GameScene: SKScene ,SKPhysicsContactDelegate{
+class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
@@ -85,6 +85,22 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     private var rocket : SKSpriteNode?
     private var spinnyNode : SKShapeNode?
     private var cam: SKCameraNode?
+    
+    public var viewController: UIViewController!
+    
+//    @IBAction func someButtonPressed(sender: UIButton) {
+//        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//        let popupVC = storyboard.instantiateViewControllerWithIdentifier("hello") as! popupViewController
+//        popupVC.modalPresentationStyle = .Popover
+//        popupVC.preferredContentSize = CGSizeMake(300, 300)
+//        let pVC = popupVC.popoverPresentationController
+//        pVC?.permittedArrowDirections = .Any
+//        pVC?.delegate = self
+//        pVC?.sourceView = sender
+//        pVC?.sourceRect = CGRect(x: 100, y: 100, width: 1, height: 1)
+//        popupVC.modalPresentationStyle = .OverCurrentContext
+//        popupVC.modalTransitionStyle = .CrossDissolve
+//    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -120,7 +136,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     
     
     override func sceneDidLoad() {
-        
+//        customView.isHidden = true
         if let label = self.rocket {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
@@ -273,6 +289,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
                     point += ((rocket?.frame.origin.y)! + 2*self.frame.maxY)
                     print(point)
                     show = true
+                    showAlert(title: "Alert title", message: "Alert message")
                 }
             } else {
                 time = 0
@@ -383,3 +400,4 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
     }
 
 }
+
