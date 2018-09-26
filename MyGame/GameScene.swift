@@ -9,56 +9,6 @@
 import SpriteKit
 import GameplayKit
 
-public func + (left: CGPoint, right: CGPoint) -> CGPoint {
-    return CGPoint(x: left.x + right.x, y: left.y + right.y)
-}
-
-public func += (left: inout CGPoint, right: CGPoint) {
-    left = left + right
-}
-
-struct Queue{
-    
-    var items:[CGPoint] = []
-    
-    
-    mutating func enqueue(element: CGPoint)
-    {
-        items.append(element)
-    }
-    
-    mutating func dequeue()
-    {
-        if !items.isEmpty {
-            items.remove(at: 0)
-        } else {
-            print("Error info: Removing an empty queue")
-        }
-    }
-    mutating func peek() -> CGPoint? {
-        if !items.isEmpty {
-            return items.first
-        }
-        else{
-            return nil
-        }
-    }
-    
-    mutating func isEmpty() -> Bool? {
-        return items.isEmpty
-    }
-    
-    mutating func array() -> [CGPoint] {
-        return items
-    }
-    
-    mutating func update() {
-        for var i in items {
-            i.y -= 0.2
-        }
-    }
-}
-
 class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
     
     var entities = [GKEntity]()
@@ -298,7 +248,9 @@ class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
     }
     
     func setUpRocket() {
-        self.rocket = self.childNode(withName: "//node") as? SKSpriteNode
+//        self.rocket = self.childNode(withName: "//node") as? SKSpriteNode
+        self.rocket = SKSpriteNode(imageNamed: "Image")
+        self.rocket?.position = CGPoint(x: 100, y: 100)
         rocket?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (rocket?.size.width)!, height: (rocket?.size.height)!))
         rocket?.physicsBody?.usesPreciseCollisionDetection = true
         rocket?.physicsBody?.mass = 100
@@ -306,6 +258,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
         rocket?.physicsBody?.allowsRotation = true
         rocket?.physicsBody!.contactTestBitMask = rocket!.physicsBody!.collisionBitMask
         rocket?.physicsBody?.angularDamping = 0.05
+        self.addChild(self.rocket!)
     }
     
     func setUpGround() {
@@ -395,9 +348,17 @@ class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
                     back.position += CGPoint(x: 0, y: 100)
                 }
             }
-            
         }
     }
+}
 
+
+
+public func + (left: CGPoint, right: CGPoint) -> CGPoint {
+    return CGPoint(x: left.x + right.x, y: left.y + right.y)
+}
+
+public func += (left: inout CGPoint, right: CGPoint) {
+    left = left + right
 }
 
