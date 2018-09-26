@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1557785A2159F390008D8B9F /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155778592159F390008D8B9F /* Alerts.swift */; };
+		15828817215B0B4A00D8498D /* Queues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15828816215B0B4A00D8498D /* Queues.swift */; };
 		15C79F2B2106551C006AB4A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C79F2A2106551C006AB4A9 /* AppDelegate.swift */; };
 		15C79F2D2106551C006AB4A9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 15C79F2C2106551C006AB4A9 /* GameScene.sks */; };
 		15C79F2F2106551C006AB4A9 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 15C79F2E2106551C006AB4A9 /* Actions.sks */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		155778592159F390008D8B9F /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
+		15828816215B0B4A00D8498D /* Queues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queues.swift; sourceTree = "<group>"; };
 		15C79F272106551C006AB4A9 /* MyGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C79F2A2106551C006AB4A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15C79F2C2106551C006AB4A9 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				15C79F392106551D006AB4A9 /* LaunchScreen.storyboard */,
 				15C79F3C2106551D006AB4A9 /* Info.plist */,
 				155778592159F390008D8B9F /* Alerts.swift */,
+				15828816215B0B4A00D8498D /* Queues.swift */,
 			);
 			path = MyGame;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 			files = (
 				15C79F312106551C006AB4A9 /* GameScene.swift in Sources */,
 				15C79F332106551C006AB4A9 /* GameViewController.swift in Sources */,
+				15828817215B0B4A00D8498D /* Queues.swift in Sources */,
 				1557785A2159F390008D8B9F /* Alerts.swift in Sources */,
 				15C79F2B2106551C006AB4A9 /* AppDelegate.swift in Sources */,
 			);
