@@ -35,6 +35,8 @@ class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
     private var rocket : SKSpriteNode?
     private var spinnyNode : SKShapeNode?
     private var cam: SKCameraNode?
+    let highestScoreKey = "highestScore"
+    private var highestScore:Int = 0
     
     public var viewController: UIViewController!
     
@@ -82,6 +84,7 @@ class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
         // INITIALIZE GROUND & LEFT
         setUpGround()
         setUpLeftWall()
+        highestScore = readHighestScore()
     }
     
     
@@ -239,7 +242,12 @@ class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
                     point += ((rocket?.frame.origin.y)! + 2*self.frame.maxY)
                     print(point)
                     show = true
-                    showAlert(title: "Alert title", message: "Alert message")
+                    if (Int(point) > highestScore) {
+                        showActionSheet(title: point.description, message: "New Highest Score")
+                        writeHighestScore(score: Int(point))
+                    } else {
+                        showActionSheet(title: point.description, message: "Your Highest Score is \(highestScore)")
+                    }
                 }
             } else {
                 time = 0
@@ -249,13 +257,18 @@ class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
     
     func setUpRocket() {
 //        self.rocket = self.childNode(withName: "//node") as? SKSpriteNode
-        self.rocket = SKSpriteNode(imageNamed: "Image")
+        let birdTexture = SKTexture(imageNamed: "stork")
+        let texturedBird = SKSpriteNode(texture: birdTexture)
+        self.rocket = texturedBird
+        self.rocket?.physicsBody = SKPhysicsBody(texture: birdTexture, size: CGSize(width: texturedBird.size.width,
+                                                height: texturedBird.size.height))
+//        self.rocket = SKSpriteNode(imageNamed: "stork")
         self.rocket?.position = CGPoint(x: 100, y: 100)
         rocket?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: (rocket?.size.width)!, height: (rocket?.size.height)!))
         rocket?.physicsBody?.usesPreciseCollisionDetection = true
         rocket?.physicsBody?.mass = 100
         rocket?.physicsBody?.affectedByGravity = true
-        rocket?.physicsBody?.allowsRotation = true
+        rocket?.physicsBody?.allowsRotation = false
         rocket?.physicsBody!.contactTestBitMask = rocket!.physicsBody!.collisionBitMask
         rocket?.physicsBody?.angularDamping = 0.05
         self.addChild(self.rocket!)
@@ -348,6 +361,25 @@ class GameScene: SKScene ,SKPhysicsContactDelegate, Alerts {
                     back.position += CGPoint(x: 0, y: 100)
                 }
             }
+        }
+    }
+    
+    func readHighestScore() -> Int {
+        let preferences = UserDefaults.standard
+        if preferences.object(forKey: highestScoreKey) == nil {
+            return 0
+        } else {
+            let score = preferences.integer(forKey: highestScoreKey)
+            return score
+        }
+    }
+    
+    func writeHighestScore(score: Int) {
+        let preferences = UserDefaults.standard
+        _ = preferences.set(score, forKey: highestScoreKey)
+        let saving = preferences.synchronize()
+        if !saving {
+            print("Can't save highest score")
         }
     }
 }
